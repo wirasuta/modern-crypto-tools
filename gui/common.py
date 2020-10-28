@@ -1,8 +1,8 @@
-import typing
+from typing import List, Dict
 from PyQt5.QtWidgets import *
 
-APP_MODE: typing.List[str] = ['RSA', 'Elgamal', 'Diffie-Hellman']
-FILE_TYPE_FILTER: typing.Dict[str, str] = {
+APP_MODE: List[str] = ['RSA', 'Elgamal', 'Diffie-Hellman']
+FILE_TYPE_FILTER: Dict[str, str] = {
     'Private Key': 'PRI File (*.pri);;All Files (*)',
     'Public Key': 'PUB File (*.pub);;All Files (*)',
 }
