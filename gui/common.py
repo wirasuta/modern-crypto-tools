@@ -5,6 +5,8 @@ APP_MODE: List[str] = ['RSA', 'Elgamal', 'Diffie-Hellman']
 FILE_TYPE_FILTER: Dict[str, str] = {
     'Private Key': 'PRI File (*.pri);;All Files (*)',
     'Public Key': 'PUB File (*.pub);;All Files (*)',
+    'Encrypted': 'ENC File (*.enc);;All Files (*)',
+    'Any': 'All Files (*)'
 }
 WIDGET_MIN_DIM = 360
 

@@ -10,6 +10,9 @@ class CipherWidget(QWidget):
         super(CipherWidget, self).__init__(parent)
         self._init_ui()
 
+        self.public_key = None
+        self.private_key = None
+
     def _init_ui(self):
         # Init layout
         self.layout = QVBoxLayout(self)
@@ -54,7 +57,6 @@ class CipherWidget(QWidget):
 
         self.button_save_pt = QPushButton('Save plaintext', self)
         self.button_save_pt.clicked.connect(self._save_plaintext)
-        self.button_save_pt.setDisabled(True)
         h_frame_layout_pt.addWidget(self.button_save_pt)
 
         self.button_load_pub_key = QPushButton('Load public key', self)
@@ -113,7 +115,6 @@ class CipherWidget(QWidget):
 
         self.button_save_ct = QPushButton('Save ciphertext', self)
         self.button_save_ct.clicked.connect(self._save_ciphertext)
-        self.button_save_ct.setDisabled(True)
         h_frame_layout_ct.addWidget(self.button_save_ct)
 
         self.button_load_priv_key = QPushButton('Load private key', self)

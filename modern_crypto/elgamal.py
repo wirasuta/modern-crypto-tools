@@ -37,8 +37,8 @@ def encrypt(plaintext: bytes, public_key: Tuple[int, int, int]) -> bytes:
         a = pow(g, k, p)
         b = (pow(y, k, p) * (m % p)) % p
 
-        ciphertext.append(bytes(f'{a:0128x}', 'utf-8'))
-        ciphertext.append(bytes(f'{b:0128x}', 'utf-8'))
+        ciphertext.append(bytes(f'{a:0256x}', 'ISO-8859-1'))
+        ciphertext.append(bytes(f'{b:0256x}', 'ISO-8859-1'))
     ciphertext = hex_of_n_bytes_to_msg(ciphertext)
 
     return ciphertext
@@ -62,8 +62,33 @@ def decrypt(ciphertext: bytes, private_key: Tuple[int, int]) -> bytes:
         a_inv = pow(a, p-1-x, p)
         m = (b * a_inv) % p
 
-        plaintext.append(bytes(f'{m:0128x}', 'utf-8'))
+        plaintext.append(bytes(f'{m:0256x}', 'ISO-8859-1'))
     plaintext = hex_of_n_bytes_to_msg(plaintext)
     plaintext = unpad(plaintext, block_size)
 
     return plaintext
+
+def save_public_key(filename: str, public_key: Tuple[int, int, int]):
+    with open(filename, 'w+') as f:
+        f.write('\n'.join([
+            hex(public_key[0])[2:],
+            hex(public_key[1])[2:],
+            hex(public_key[2])[2:]
+        ]))
+
+def save_private_key(filename: str, private_key: Tuple[int, int]):
+    with open(filename, 'w+') as f:
+        f.write('\n'.join([
+            hex(private_key[0])[2:],
+            hex(private_key[1])[2:]
+        ]))
+
+def load_public_key(filename: str) -> Tuple[int, int, int]:
+    with open(filename, 'r') as f:
+        content = f.readlines()
+    return (int(content[0], 16), int(content[1], 16), int(content[2], 16))
+
+def load_private_key(filename: str) -> Tuple[int, int]:
+    with open(filename, 'r') as f:
+        content = f.readlines()
+    return (int(content[0], 16), int(content[1], 16), )
