@@ -3,10 +3,10 @@ from random import randint
 from math import gcd
 from typing import Tuple
 from modern_crypto.common import *
-import time
 
 KEY_SIZE = 16
-# key size above 16 sometimes give error when encrypt or decrypt
+# key size above 16 sometimes give different result from the initial plaintext
+# public key range should be wider for bigger key size, but it would effect the private key generator performance
 
 def generate_rsa_key() -> Tuple[Tuple[int,int], Tuple[int,int]]:
     """
