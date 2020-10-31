@@ -136,6 +136,7 @@ class ElgamalWidget(CipherWidget):
         message.exec()
 
     def _encrypt(self):
+        self.plaintext = None
         pt = self.plaintext if self.plaintext is not None else self.text_area_pt.toPlainText(
         ).encode('ISO-8859-1').replace(b'\n', b'\r')
         start = time()

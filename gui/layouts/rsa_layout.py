@@ -136,11 +136,13 @@ class RSAWidget(CipherWidget):
         message.exec()
 
     def _encrypt(self):
+        self.plaintext = None
         pt = self.plaintext if self.plaintext is not None else self.text_area_pt.toPlainText(
         ).encode('ISO-8859-1').replace(b'\n', b'\r')
         start = time()
         self.ciphertext = encrypt(pt, self.public_key)
         end = time()
+        self.plaintext = pt
         self.text_area_ct.setText(self.ciphertext.decode('ISO-8859-1'))
 
         message = QMessageBox(
@@ -148,9 +150,11 @@ class RSAWidget(CipherWidget):
             'Modern Crypto Tools: RSA',
             f'Encrypted in {end - start:0.2f}s, ciphertext size {len(self.ciphertext)} bytes'
         )
+
         message.exec()
 
     def _decrypt(self):
+        # self.ciphertext = None
         ct = self.ciphertext if self.ciphertext is not None else self.text_area_ct.toPlainText(
         ).encode('ISO-8859-1').replace(b'\n', b'\r')
         start = time()
@@ -163,6 +167,7 @@ class RSAWidget(CipherWidget):
             'Modern Crypto Tools: RSA',
             f'Decrypted in {end - start:0.2f}s, plaintext size {len(self.plaintext)} bytes'
         )
+
         message.exec()
 
     def _update_enc_dec_state(self):
