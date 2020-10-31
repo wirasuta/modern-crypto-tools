@@ -5,6 +5,7 @@ from modern_crypto.common import *
 
 KEY_SIZE = 1024
 
+
 def generate_eg_keypair() -> Tuple[Tuple[int, int, int], Tuple[int, int]]:
     """
     returns public and private key
@@ -16,6 +17,7 @@ def generate_eg_keypair() -> Tuple[Tuple[int, int, int], Tuple[int, int]]:
 
     return (y, g, p), (x, p)
 
+
 def encrypt(plaintext: bytes, public_key: Tuple[int, int, int]) -> bytes:
     """
     returns ciphertext with double the size of plaintext
@@ -26,7 +28,7 @@ def encrypt(plaintext: bytes, public_key: Tuple[int, int, int]) -> bytes:
     g = public_key[1]
     p = public_key[2]
     k = randint(1, p-2)
-    block_size = KEY_SIZE // 8
+    block_size = (KEY_SIZE-1) // 8
     plaintext = pad(plaintext, block_size)
     pt_blocks = msg_to_hex_of_n_bytes(plaintext, block_size)
 
@@ -37,11 +39,12 @@ def encrypt(plaintext: bytes, public_key: Tuple[int, int, int]) -> bytes:
         a = pow(g, k, p)
         b = (pow(y, k, p) * (m % p)) % p
 
-        ciphertext.append(bytes(f'{a:0256x}', 'ISO-8859-1'))
-        ciphertext.append(bytes(f'{b:0256x}', 'ISO-8859-1'))
+        ciphertext.append(f'{a:0256x}'.encode())
+        ciphertext.append(f'{b:0256x}'.encode())
     ciphertext = hex_of_n_bytes_to_msg(ciphertext)
 
     return ciphertext
+
 
 def decrypt(ciphertext: bytes, private_key: Tuple[int, int]) -> bytes:
     """
@@ -52,6 +55,7 @@ def decrypt(ciphertext: bytes, private_key: Tuple[int, int]) -> bytes:
     x = private_key[0]
     p = private_key[1]
     block_size = KEY_SIZE // 8
+    pt_block_size = (KEY_SIZE-1) // 8
     ct_blocks = msg_to_hex_of_n_bytes(ciphertext, block_size)
 
     plaintext = []
@@ -62,11 +66,12 @@ def decrypt(ciphertext: bytes, private_key: Tuple[int, int]) -> bytes:
         a_inv = pow(a, p-1-x, p)
         m = (b * a_inv) % p
 
-        plaintext.append(bytes(f'{m:0256x}', 'ISO-8859-1'))
+        plaintext.append(f'{m:0254x}'.encode())
     plaintext = hex_of_n_bytes_to_msg(plaintext)
-    plaintext = unpad(plaintext, block_size)
+    plaintext = unpad(plaintext, pt_block_size)
 
     return plaintext
+
 
 def save_public_key(filename: str, public_key: Tuple[int, int, int]):
     with open(filename, 'w+') as f:
@@ -76,6 +81,7 @@ def save_public_key(filename: str, public_key: Tuple[int, int, int]):
             hex(public_key[2])[2:]
         ]))
 
+
 def save_private_key(filename: str, private_key: Tuple[int, int]):
     with open(filename, 'w+') as f:
         f.write('\n'.join([
@@ -83,10 +89,12 @@ def save_private_key(filename: str, private_key: Tuple[int, int]):
             hex(private_key[1])[2:]
         ]))
 
+
 def load_public_key(filename: str) -> Tuple[int, int, int]:
     with open(filename, 'r') as f:
         content = f.readlines()
     return (int(content[0], 16), int(content[1], 16), int(content[2], 16))
+
 
 def load_private_key(filename: str) -> Tuple[int, int]:
     with open(filename, 'r') as f:

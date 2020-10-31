@@ -12,6 +12,8 @@ class CipherWidget(QWidget):
 
         self.public_key = None
         self.private_key = None
+        self.ciphertext = None
+        self.plaintext = None
 
     def _init_ui(self):
         # Init layout
@@ -127,36 +129,36 @@ class CipherWidget(QWidget):
         self.layout.addWidget(h_frame_widget_ct)
 
         self.setLayout(self.layout)
-    
+
     def _generate_key_pair(self):
         pass
-    
+
     def _save_pub_key(self):
         pass
-    
+
     def _save_priv_key(self):
         pass
-    
+
     def _load_pub_key(self):
         pass
-    
+
     def _load_priv_key(self):
         pass
-    
+
     def _load_plaintext(self):
         pass
-    
+
     def _save_plaintext(self):
         pass
-    
+
     def _load_ciphertext(self):
         pass
-    
+
     def _save_ciphertext(self):
         pass
-    
+
     def _encrypt(self):
         pass
-    
+
     def _decrypt(self):
         pass
