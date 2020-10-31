@@ -25,3 +25,17 @@ def hex_of_n_bytes_to_msg(msg_blocks: List[bytes]) -> bytes:
     msg_blocks = [unhexlify(block) for block in msg_blocks]
     msg = b''.join(msg_blocks)
     return msg
+
+def egcd(a: int, b: int) -> int:
+    if a == 0:
+        return (b, 0, 1)
+    else:
+        g, y, x = egcd(b % a, a)
+        return (g, x - (b // a) * y, y)
+
+def modinv(a: int, modulus: int) -> int:
+    g, x, y = egcd(a, modulus)
+    if g != 1:
+        raise Exception('inverse doesn\'t exist')
+    else:
+        return x % modulus

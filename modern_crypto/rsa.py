@@ -4,7 +4,7 @@ from math import gcd
 from typing import Tuple
 from modern_crypto.common import *
 
-KEY_SIZE = 16
+KEY_SIZE = 1024
 # key size above 16 sometimes give different result from the initial plaintext
 # public key range should be wider for bigger key size, but it would effect the private key generator performance
 
@@ -16,16 +16,8 @@ def generate_rsa_key() -> Tuple[Tuple[int,int], Tuple[int,int]]:
     q = number.getPrime(KEY_SIZE)
     n = p*q
     euler = (p-1)*(q-1)
-    public = randint(1, 9999999)
-    # public = randint(1, euler-1)
-    while (gcd(public,euler) != 1):
-        public = randint(1, 9999999)
-        # public = randint(1, euler-1)
-
-    k = 1
-    while ((1+k*euler) % public != 0):
-        k += 1
-    private = int((1+k*euler) / public)
+    public = 65537
+    private = modinv(public, euler)
 
     return (public, n), (private, n)
 
