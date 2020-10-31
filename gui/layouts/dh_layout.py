@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from os import path
 from gui.common import *
+from modern_crypto.diffie_hellman import *
 
 
 class DHWidget(QWidget):
@@ -51,7 +52,32 @@ class DHWidget(QWidget):
         self.button_generate_key.clicked.connect(self._generate_session_key)
         self.layout.addWidget(self.button_generate_key)
 
+        # Add session key result
+        self.text_area_result = QTextEdit(self)
+        self.text_area_result.resize(300, 100)
+        self.text_area_result.setReadOnly(True)
+        self.text_area_result.setHidden(True)
+        self.text_area_result.setSizePolicy(
+            QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.layout.addWidget(self.text_area_result)
+
         self.setLayout(self.layout)
-    
+
     def _generate_session_key(self):
-        pass
+        n = int(self.text_area_n.toPlainText())
+        g = int(self.text_area_g.toPlainText())
+        y = int(self.text_area_y.toPlainText())
+        x = int(self.text_area_x.toPlainText())
+
+        X = shared_op(g, n, x)
+        K = generate_private_key(X, n, y)
+
+        self.text_area_result.setText(str(K))
+        self.text_area_result.setHidden(False)
+
+        message = QMessageBox(
+            QMessageBox.NoIcon,
+            'Modern Crypto Tools: Diffie-Hellman',
+            f'Generated shared secret key'
+        )
+        message.exec()
